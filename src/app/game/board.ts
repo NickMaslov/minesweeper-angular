@@ -1,10 +1,22 @@
 import { Cell } from "./cell";
 
+const peers = [
+  [-1, -1],
+  [-1, 0],
+  [-1, 1],
+  [0, -1],
+  [0, 1],
+  [1, -1],
+  [1, 0],
+  [1, 1]
+];
+
 export class Board {
   cells: Cell[][] = [];
 
   private remainingCells = 0;
   private remainingCount = 0;
+  
 
   constructor(size: number, mines: number) {
     for (let y = 0; y < size; y++) {
@@ -18,16 +30,6 @@ export class Board {
       this.getRandomCell().mine = true;
     }
     //Count mines
-    const peers = [
-      [-1, -1],
-      [-1, 0],
-      [-1, 1],
-      [0, -1],
-      [0, 1],
-      [1, -1],
-      [1, 0],
-      [1, 1]
-    ];
     for (let y = 0; y < size; y++) {
       for (let x = 0; x < size; x++) {
         let adjacentMines = 0;
@@ -49,6 +51,7 @@ export class Board {
     }
     this.remainingCells = size * size - this.remainingCount;
   }
+
   getRandomCell(): Cell {
     const y = Math.floor(Math.random() * this.cells.length);
     const x = Math.floor(Math.random() * this.cells[y].length);
@@ -64,7 +67,18 @@ export class Board {
       return "gameover";
     } else {
       cell.status = "clear";
-      
+
+      // Empty cell, let's clear the whole block.
+      if (cell.proximityMines === 0 ){
+        for (let peer of peers) {
+          if (
+            this.cells[cell.row+ peer[0]] &&
+            this.cells[cell.row + peer[0]][cell.column + peer[1]] 
+          ) {
+            this.checkCell( this.cells[cell.row + peer[0]][cell.column + peer[1]])
+          }
+        }
+}
       if (this.remainingCells-- <= 1) {
         return "win";
       }

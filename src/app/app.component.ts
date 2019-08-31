@@ -8,6 +8,29 @@ import { Cell } from "./game/cell";
 })
 export class AppComponent {
   title = "minesweeper";
-  board = new Board(10, 5);
+  board: Board;
+  constructor(){
+    this.reset();
+  }
 
+  checkCell(cell: Cell) {
+    const result = this.board.checkCell(cell);
+    if (result === "gameover") {
+      alert("You lose");
+    } else if (result === "win") {
+      alert("You won");
+    }
+  }
+
+  flag(cell: Cell) {
+    if (cell.status === "flag") {
+      cell.status = "open";
+    } else {
+      cell.status = "flag";
+    }
+  }
+
+  reset(){
+    this.board  = new Board(5,5)
+  }
 }

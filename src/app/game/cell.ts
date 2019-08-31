@@ -1,9 +1,7 @@
 export class Cell {
-    status: 'open'|'clear'|'flag' = 'open';
-    mine = false;
-    proximityMines: number = 0
+  status: "open" | "clear" | "flag" = "open";
+  mine = false;
+  proximityMines: number = 0;
 
-    constructor(public row:number, public column:number){
-
-    }
+  constructor(public row: number, public column: number) {}
 }
